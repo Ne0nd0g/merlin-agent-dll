@@ -48,4 +48,5 @@ $(shell mkdir -p ${DIR})
 default:
 	export GOOS=windows GOARCH=amd64 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ CGO_ENABLED=1; \
 	go build ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -buildmode=c-archive -o ${DIR}/main.a main.go; \
-	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.dll merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32
+	cp merlin.c ${DIR}; \
+	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32
