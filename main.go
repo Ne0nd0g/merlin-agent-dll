@@ -65,7 +65,6 @@ func run(URL string) {
 		AgentID:     a.ID,
 		Protocol:    protocol,
 		Host:        host,
-		URL:         URL,
 		Proxy:       proxy,
 		UserAgent:   useragent,
 		PSK:         psk,
@@ -74,6 +73,10 @@ func run(URL string) {
 		AuthPackage: "opaque",
 		Opaque:      opaque,
 	}
+	if URL != "" {
+		clientConfig.URL = strings.Split(strings.ReplaceAll(URL, " ", ""), ",")
+	}
+
 	a.Client, errClient = http.New(clientConfig)
 	if errClient != nil {
 		os.Exit(1)
