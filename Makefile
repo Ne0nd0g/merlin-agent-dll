@@ -1,7 +1,7 @@
 # !!!MAKE SURE YOUR GOPATH ENVIRONMENT VARIABLE IS SET FIRST!!!
 
 # Merlin Server & Agent version number
-VERSION="1.0.0"
+VERSION=1.2.0
 
 BUILD=$(shell git rev-parse HEAD)
 DIR=bin/v${VERSION}/${BUILD}
