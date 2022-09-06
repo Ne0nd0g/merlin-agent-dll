@@ -64,3 +64,5 @@ garble:
 	cp merlin.c ${DIR}; \
 	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32
 
+clean:
+	rm -rf ${DIR}*
