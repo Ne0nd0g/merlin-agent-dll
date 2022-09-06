@@ -44,6 +44,13 @@ F2=LICENSE
 # Make Directory to store executables
 $(shell mkdir -p ${DIR})
 
+# Misc
+# GOGARBLE contains a list of all the packages to obfuscate
+GOGARBLE=golang.org,gopkg.in,github.com
+# The Merlin server and agent MUST be built with the same seed value
+# Set during build with "make linux-garble SEED=<insert seed>
+SEED=d0d03a0ae4722535a0e1d5d0c8385ce42015511e68d960fadef4b4eaf5942feb
+
 # Compile Agent - Windows x64 DLL - main() - Console
 default:
 	export GOOS=windows GOARCH=amd64 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ CGO_ENABLED=1; \
