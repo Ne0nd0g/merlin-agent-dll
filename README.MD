@@ -8,5 +8,5 @@ This repository contains the very minimal C code file that is used to compile a 
 
 Documentation for Merlin can be found [here](https://merlin-c2.readthedocs.io/en/latest) and specific details for building the DLL can be found on the [DLL Agent](https://merlin-c2.readthedocs.io/en/latest/agent/dll.html) page.
 
-Visit Merlin's [main](https://github.com/Ne0nd0g/melrin) repository and [agent](https://github.com/Ne0nd0g/melrin-agent) repository for additional information.
+Visit Merlin's [main](https://github.com/Ne0nd0g/merlin) repository and [agent](https://github.com/Ne0nd0g/merlin-agent) repository for additional information.
 
