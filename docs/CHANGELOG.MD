@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.6.0 - 2022-11-11
+
+## Added
+
+- Parrot specific web browsers through [utls](https://github.com/refraction-networking/utls#parroting) library
+    - Use the agent's `-parrot` command line argument
+    - Use the Makefile's `PARROT=` command line argument
+    - Can be changed while the agent is already running
+    - Examples include `HelloChrome_102` or `HelloRandomized`
+    - [List of available strings](https://github.com/refraction-networking/utls/blob/8e1e65eb22d21c635523a31ec2bcb8730991aaad/u_common.go#L150)
+    - If a JA3 string is provided, the parrot string will be ignored
+
+### Changed
+
+- Require Go v1.19
+- Updated `go.mod` to use merlin-agent v1.6.0
+
 ## 1.5.1 - 2022-09-07
 
 ### Added

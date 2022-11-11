@@ -1,7 +1,7 @@
 # !!!MAKE SURE YOUR GOPATH ENVIRONMENT VARIABLE IS SET FIRST!!!
 
 # Merlin Server & Agent version number
-VERSION=1.5.0
+VERSION=1.6.0
 
 BUILD=$(shell git rev-parse HEAD)
 DIR=bin/v${VERSION}/${BUILD}
@@ -32,9 +32,11 @@ USERAGENT ?= Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML,
 XUSERAGENT =-X "main.useragent=$(USERAGENT)"
 SLEEP ?= 30s
 XSLEEP = -X main.sleep=$(SLEEP)
+PARROT ?=
+XPARROT=-X "main.parrot=${PARROT}"
 
 # Compile Flags
-LDFLAGS=-ldflags '-s -w ${XBUILD} ${XPROTO} ${XURL} ${XHOST} ${XPSK} ${XPROXY} ${XKILLDATE} ${XMAXRETRY} ${XPADDING} ${XSKEW} ${XUSERAGENT} ${XSLEEP} -buildid='
+LDFLAGS=-ldflags '-s -w ${XBUILD} ${XPROTO} ${XURL} ${XHOST} ${XPSK} ${XPROXY} ${XKILLDATE} ${XMAXRETRY} ${XPADDING} ${XSKEW} ${XUSERAGENT} ${XSLEEP} ${XPARROT} -buildid='
 GCFLAGS=-gcflags=all=-trimpath=$(GOPATH)
 ASMFLAGS=-asmflags=all=-trimpath=$(GOPATH)# -asmflags=-trimpath=$(GOPATH)
 PACKAGE=7za a -p${PASSWORD} -mhe -mx=9
@@ -46,7 +48,7 @@ $(shell mkdir -p ${DIR})
 
 # Misc
 # GOGARBLE contains a list of all the packages to obfuscate
-GOGARBLE=golang.org,gopkg.in,github.com
+GOGARBLE=golang.org,gopkg.in,github.com,go.dedis.ch
 # The Merlin server and agent MUST be built with the same seed value
 # Set during build with "make linux-garble SEED=<insert seed>
 SEED=d0d03a0ae4722535a0e1d5d0c8385ce42015511e68d960fadef4b4eaf5942feb

