@@ -2,13 +2,13 @@ module github.com/Ne0nd0g/merlin-agent-dll
 
 go 1.19
 
-require github.com/Ne0nd0g/merlin-agent v1.6.0
+require github.com/Ne0nd0g/merlin-agent v1.6.3
 
 require (
 	github.com/Binject/debug v0.0.0-20211007083345-9605c99179ee // indirect
 	github.com/C-Sto/BananaPhone v0.0.0-20220220002628-6585e5913761 // indirect
 	github.com/Ne0nd0g/go-clr v1.0.3 // indirect
-	github.com/Ne0nd0g/merlin v1.5.0 // indirect
+	github.com/Ne0nd0g/merlin v1.5.1 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5 // indirect
 	github.com/awgh/rawreader v0.0.0-20200626064944-56820a9c6da4 // indirect
@@ -32,9 +32,9 @@ require (
 	golang.org/x/crypto v0.1.0 // indirect
 	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
-	golang.org/x/net v0.1.0 // indirect
-	golang.org/x/sys v0.1.0 // indirect
-	golang.org/x/text v0.4.0 // indirect
+	golang.org/x/net v0.7.0 // indirect
+	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 )
