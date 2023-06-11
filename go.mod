@@ -2,7 +2,7 @@ module github.com/Ne0nd0g/merlin-agent-dll
 
 go 1.19
 
-require github.com/Ne0nd0g/merlin-agent v1.6.3
+require github.com/Ne0nd0g/merlin-agent v1.6.5
 
 require (
 	github.com/Binject/debug v0.0.0-20211007083345-9605c99179ee // indirect
