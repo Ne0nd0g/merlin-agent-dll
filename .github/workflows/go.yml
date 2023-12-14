@@ -1,10 +1,20 @@
 # This workflow will build a golang project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
 
-name: "Merlin Agent DLL Build & Test"
+name: "Merlin Agent DLL Build & Test - Development Work"
 
 on:
   push:
+    branches-ignore:
+      - main
+    paths-ignore:
+      - '.github/**'
+      - 'docs/**'
+      - '.gitattributes'
+      - '.gitignore'
+      - '.gitmodules'
+      - 'LICENSE'
+      - 'README.MD'
   pull_request:
 
 jobs:

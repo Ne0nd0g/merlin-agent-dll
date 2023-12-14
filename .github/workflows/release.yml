@@ -4,6 +4,14 @@ on:
   push:
     tags:
       - 'v*.*.*'
+    paths-ignore:
+      - '.github/**'
+      - 'docs/**'
+      - '.gitattributes'
+      - '.gitignore'
+      - '.gitmodules'
+      - 'LICENSE'
+      - 'README.MD'
 
 jobs:
   release:
