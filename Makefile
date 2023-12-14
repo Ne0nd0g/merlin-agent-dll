@@ -51,9 +51,9 @@ XSECURE =-X "main.secure=${SECURE}"
 LDFLAGS=-ldflags '-s -w ${XSECURE} ${XPARROT} ${XADDR} ${XAUTH} ${XTRANSFORMS} ${XLISTENER} ${XBUILD} ${XPROTO} ${XURL} ${XHOST} ${XPSK} ${XSLEEP} ${XPROXY} $(XUSERAGENT) $(XHEADERS) ${XSKEW} ${XPAD} ${XKILLDATE} ${XRETRY} -buildid='
 GCFLAGS=-gcflags=all=-trimpath=$(GOPATH)
 ASMFLAGS=-asmflags=all=-trimpath=$(GOPATH)# -asmflags=-trimpath=$(GOPATH)
+PASSWORD=merlin
 PACKAGE=7za a -p${PASSWORD} -mhe -mx=9
-F=README.MD LICENSE data/modules docs data/README.MD data/agents/README.MD data/db/ data/log/README.MD data/x509 data/src data/bin data/html
-F2=LICENSE
+F=LICENSE
 
 # Make Directory to store executables
 $(shell mkdir -p ${DIR})
@@ -73,11 +73,17 @@ default:
 	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32 && \
 	cp ${DIR}/merlin.dll .
 
+distro: clean default package
+
 garble:
 	export GOGARBLE=${GOGARBLE}; export GOOS=windows GOARCH=amd64 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ CGO_ENABLED=1; \
 	garble -tiny -literals -seed ${SEED} build ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -buildmode=c-archive -o ${DIR}/main.a main.go; \
 	cp merlin.c ${DIR}; \
 	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32
+
+package:
+	${PACKAGE} ${DIR}/merlin-agent-dll.7z ${DIR}/merlin.dll ${F}
+	cp ${DIR}/merlin-agent-dll.7z .
 
 clean:
 	rm -rf ${DIR}*
