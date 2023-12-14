@@ -27,6 +27,10 @@ jobs:
         id: build
         run: 'make'
 
+      - name: Install Mingw-w64
+        id: install_mingw
+        run: sudo apt-get install gcc-mingw-w64-x86-64
+
       - name: Install 7zip
         id: install_7zip
         run: sudo apt-get install p7zip-full
