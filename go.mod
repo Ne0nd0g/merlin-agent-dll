@@ -3,7 +3,7 @@ module github.com/Ne0nd0g/merlin-agent-dll/v2
 go 1.21
 
 require (
-	github.com/Ne0nd0g/merlin-agent/v2 v2.2.0
+	github.com/Ne0nd0g/merlin-agent/v2 v2.3.0
 	github.com/google/uuid v1.5.0
 )
 
@@ -11,7 +11,7 @@ require (
 	github.com/Binject/debug v0.0.0-20230508195519-26db73212a7a // indirect
 	github.com/C-Sto/BananaPhone v0.0.0-20220220002628-6585e5913761 // indirect
 	github.com/Ne0nd0g/go-clr v1.0.3 // indirect
-	github.com/Ne0nd0g/merlin-message v1.2.0 // indirect
+	github.com/Ne0nd0g/merlin-message v1.3.0 // indirect
 	github.com/Ne0nd0g/npipe v1.1.0 // indirect
 	github.com/andybalholm/brotli v1.0.6 // indirect
 	github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5 // indirect
@@ -19,7 +19,6 @@ require (
 	github.com/cloudflare/circl v1.3.6 // indirect
 	github.com/cretz/gopaque v0.1.0 // indirect
 	github.com/fatih/color v1.16.0 // indirect
-	github.com/gaukas/godicttls v0.0.4 // indirect
 	github.com/go-jose/go-jose/v3 v3.0.1 // indirect
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
 	github.com/google/pprof v0.0.0-20231212022811-ec68065c825e // indirect
@@ -30,12 +29,12 @@ require (
 	github.com/quic-go/qpack v0.4.0 // indirect
 	github.com/quic-go/qtls-go1-20 v0.4.1 // indirect
 	github.com/quic-go/quic-go v0.40.1 // indirect
-	github.com/refraction-networking/utls v1.5.4 // indirect
+	github.com/refraction-networking/utls v1.6.0 // indirect
 	go.dedis.ch/fixbuf v1.0.3 // indirect
 	go.dedis.ch/kyber/v3 v3.1.0 // indirect
-	go.uber.org/mock v0.3.0 // indirect
-	golang.org/x/crypto v0.16.0 // indirect
-	golang.org/x/exp v0.0.0-20231206192017-f3f8817b8deb // indirect
+	go.uber.org/mock v0.4.0 // indirect
+	golang.org/x/crypto v0.17.0 // indirect
+	golang.org/x/exp v0.0.0-20231226003508-02704c960a9b // indirect
 	golang.org/x/mod v0.14.0 // indirect
 	golang.org/x/net v0.19.0 // indirect
 	golang.org/x/sys v0.15.0 // indirect
