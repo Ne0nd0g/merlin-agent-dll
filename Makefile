@@ -1,11 +1,20 @@
 # !!!MAKE SURE YOUR GOPATH ENVIRONMENT VARIABLE IS SET FIRST!!!
 
 # Merlin Agent DLL
-VERSION=2.2.0-dll
+VERSION=2.3.0-dll
 
 BUILD=$(shell git rev-parse HEAD)
 DIR=bin/v${VERSION}/${BUILD}
 XBUILD=-X "github.com/Ne0nd0g/merlin-agent/v2/core.Build=${BUILD}"
+# http - Include the HTTP client (including HTTP/1.1, HTTP/2, and HTTP/3)
+# http1 - Include the HTTP/1.1 client from Go's standard library
+# http2 - Include the HTTP/2 client
+# http3 - Include the HTTP/3 client
+# smb - Include the peer-to-peer SMB client
+# tcp - Include the peer-to-peer TCP client
+# udp - Include the peer-to-peer UDP client
+# winhttp - Include the Windows HTTP client
+TAGS ?=
 
 # Merlin Agent Variables
 URL ?= https://127.0.0.1:443
@@ -18,6 +27,8 @@ SLEEP ?= 30s
 XSLEEP =-X "main.sleep=$(SLEEP)"
 HOST ?=
 XHOST =-X "main.host=$(HOST)"
+HTTPCLIENT ?= go
+XHTTPCLIENT =-X "main.httpClient=$(HTTPCLIENT)"
 PROTO ?= h2
 XPROTO =-X "main.protocol=$(PROTO)"
 JA3 ?=
@@ -48,7 +59,7 @@ SECURE ?= false
 XSECURE =-X "main.secure=${SECURE}"
 
 # Compile Flags
-LDFLAGS=-ldflags '-s -w ${XSECURE} ${XPARROT} ${XADDR} ${XAUTH} ${XTRANSFORMS} ${XLISTENER} ${XBUILD} ${XPROTO} ${XURL} ${XHOST} ${XPSK} ${XSLEEP} ${XPROXY} $(XUSERAGENT) $(XHEADERS) ${XSKEW} ${XPAD} ${XKILLDATE} ${XRETRY} -buildid='
+LDFLAGS=-ldflags '-s -w ${XSECURE} ${XPARROT} ${XADDR} ${XAUTH} ${XTRANSFORMS} ${XLISTENER} ${XBUILD} ${XPROTO} ${XURL} ${XHOST} ${XHTTPCLIENT} ${XPSK} ${XSLEEP} ${XPROXY} $(XUSERAGENT) $(XHEADERS) ${XSKEW} ${XPAD} ${XKILLDATE} ${XRETRY} -buildid='
 GCFLAGS=-gcflags=all=-trimpath=$(GOPATH)
 ASMFLAGS=-asmflags=all=-trimpath=$(GOPATH)# -asmflags=-trimpath=$(GOPATH)
 PASSWORD=merlin
@@ -66,7 +77,7 @@ SEED=d0d03a0ae4722535a0e1d5d0c8385ce42015511e68d960fadef4b4eaf5942feb
 # Compile Agent - Windows x64 DLL - main() - Console
 default:
 	export GOOS=windows GOARCH=amd64 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ CGO_ENABLED=1; \
-	go build ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -buildmode=c-archive -o ${DIR}/main.a main.go && \
+	go build -tags ${TAGS} -trimpath ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -buildmode=c-archive -o ${DIR}/main.a main.go && \
 	cp merlin.c ${DIR} && \
 	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32 && \
 	cp ${DIR}/merlin.dll .
@@ -75,7 +86,7 @@ distro: clean default package
 
 garble:
 	export GOOS=windows GOARCH=amd64 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ CGO_ENABLED=1; \
-	garble -tiny -literals -seed ${SEED} build ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -buildmode=c-archive -o ${DIR}/main.a main.go; \
+	garble -tiny -literals -seed ${SEED} build -tags ${TAGS} -trimpath ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -buildmode=c-archive -o ${DIR}/main.a main.go; \
 	cp merlin.c ${DIR}; \
 	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32
 
