@@ -79,6 +79,7 @@ default:
 	export GOOS=windows GOARCH=amd64 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ CGO_ENABLED=1; \
 	go build -tags ${TAGS} -trimpath ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -buildmode=c-archive -o ${DIR}/main.a main.go && \
 	cp merlin.c ${DIR} && \
+	x86_64-w64-mingw32-gcc-ranlib ${DIR}/main.a && \
 	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32 && \
 	cp ${DIR}/merlin.dll .
 
@@ -88,6 +89,7 @@ garble:
 	export GOOS=windows GOARCH=amd64 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ CGO_ENABLED=1; \
 	garble -tiny -literals -seed ${SEED} build -tags ${TAGS} -trimpath ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -buildmode=c-archive -o ${DIR}/main.a main.go; \
 	cp merlin.c ${DIR}; \
+	x86_64-w64-mingw32-gcc-ranlib ${DIR}/main.a; \
 	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32
 
 package:
