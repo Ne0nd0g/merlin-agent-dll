@@ -1,7 +1,7 @@
 # !!!MAKE SURE YOUR GOPATH ENVIRONMENT VARIABLE IS SET FIRST!!!
 
 # Merlin Agent DLL
-VERSION=2.3.2-dll
+VERSION=2.3.3-dll
 
 BUILD=$(shell git rev-parse HEAD)
 DIR=bin/v${VERSION}/${BUILD}
@@ -81,6 +81,15 @@ default:
 	cp merlin.c ${DIR} && \
 	x86_64-w64-mingw32-gcc-ranlib ${DIR}/main.a && \
 	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32 && \
+	cp ${DIR}/merlin.dll .
+
+# Compile Agent - Windows x86 DLL - main() - Console
+386:
+	export GOOS=windows GOARCH=386 CC=i686-w64-mingw32-gcc CXX=xi686-w64-mingw32-g++ CGO_ENABLED=1; \
+	go build -tags ${TAGS} -trimpath ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -buildmode=c-archive -o ${DIR}/main.a main.go && \
+	cp merlin.c ${DIR} && \
+	i686-w64-mingw32-gcc-ranlib ${DIR}/main.a && \
+	i686-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32 && \
 	cp ${DIR}/merlin.dll .
 
 distro: clean default package
