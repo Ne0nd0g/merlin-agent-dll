@@ -30,16 +30,16 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.21'
+          go-version: '1.24'
           check-latest: true
 
       - name: Install Mingw-w64
         id: install_mingw
-        run: sudo apt-get install gcc-mingw-w64-x86-64
+        run: sudo apt-get install gcc-mingw-w64-x86-64 gcc-mingw-w64-i686
 
       - name: 'Build Merlin Agent DLL'
         id: build
-        run: 'make'
+        run: 'make default 386'
 
       - name: Install 7zip
         id: install_7zip
@@ -53,7 +53,7 @@ jobs:
         id: govulncheck
         uses: golang/govulncheck-action@v1
         with:
-          go-version-input: '1.21'
+          go-version-input: '1.24'
           go-package: './...'
 
       - name: Gosec Security Scanner

@@ -80,7 +80,7 @@ default:
 	go build -tags ${TAGS} -trimpath ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -buildmode=c-archive -o ${DIR}/main.a main.go && \
 	cp merlin.c ${DIR} && \
 	x86_64-w64-mingw32-gcc-ranlib ${DIR}/main.a && \
-	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32 && \
+	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.x64.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32 && \
 	cp ${DIR}/merlin.dll .
 
 # Compile Agent - Windows x86 DLL - main() - Console
@@ -89,10 +89,10 @@ default:
 	go build -tags ${TAGS} -trimpath ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -buildmode=c-archive -o ${DIR}/main.a main.go && \
 	cp merlin.c ${DIR} && \
 	i686-w64-mingw32-gcc-ranlib ${DIR}/main.a && \
-	i686-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32 && \
+	i686-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.x86.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32 && \
 	cp ${DIR}/merlin.dll .
 
-distro: clean default package
+distro: clean default 386 package
 
 garble:
 	export GOOS=windows GOARCH=amd64 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ CGO_ENABLED=1; \
@@ -102,7 +102,7 @@ garble:
 	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32
 
 package:
-	${PACKAGE} ${DIR}/merlin-agent-dll.7z ${DIR}/merlin.dll ${F}
+	${PACKAGE} ${DIR}/merlin-agent-dll.7z ${DIR}/merlin.x64.dll ${DIR}/merlin.x86.dll ${F}
 	cp ${DIR}/merlin-agent-dll.7z .
 
 clean:
