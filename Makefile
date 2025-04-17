@@ -81,7 +81,7 @@ default:
 	cp merlin.c ${DIR} && \
 	x86_64-w64-mingw32-gcc-ranlib ${DIR}/main.a && \
 	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.x64.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32 && \
-	cp ${DIR}/merlin.dll .
+	cp ${DIR}/merlin.x64.dll .
 
 # Compile Agent - Windows x86 DLL - main() - Console
 386:
@@ -90,7 +90,7 @@ default:
 	cp merlin.c ${DIR} && \
 	i686-w64-mingw32-gcc-ranlib ${DIR}/main.a && \
 	i686-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.x86.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32 && \
-	cp ${DIR}/merlin.dll .
+	cp ${DIR}/merlin.86.dll .
 
 distro: clean default 386 package
 
