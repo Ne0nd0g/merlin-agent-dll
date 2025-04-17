@@ -90,7 +90,7 @@ default:
 	cp merlin.c ${DIR} && \
 	i686-w64-mingw32-gcc-ranlib ${DIR}/main.a && \
 	i686-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.x86.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32 && \
-	cp ${DIR}/merlin.86.dll .
+	cp ${DIR}/merlin.x86.dll .
 
 distro: clean default 386 package
 
