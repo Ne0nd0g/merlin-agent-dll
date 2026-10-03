@@ -1,8 +1,6 @@
 module github.com/Ne0nd0g/merlin-agent-dll/v2
 
-go 1.23.0
-
-toolchain go1.24.2
+go 1.27.0
 
 require (
 	github.com/Ne0nd0g/merlin-agent/v2 v2.4.3
