@@ -1,0 +1,6 @@
+# golangci-lint v2 configuration.
+# Minimal on purpose: v2's default linters plus its default "lax" exclusion of
+# generated files. Note this module is a single Windows CGO c-archive
+# (main.go is //go:build windows && cgo), so linting only sees it under
+# GOOS=windows CGO_ENABLED=1; there is no dedicated lint job in CI (see go.yml).
+version: "2"

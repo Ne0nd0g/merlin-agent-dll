@@ -4,14 +4,6 @@ on:
   push:
     tags:
       - 'v*.*.*'
-    paths-ignore:
-      - '.github/**'
-      - 'docs/**'
-      - '.gitattributes'
-      - '.gitignore'
-      - '.gitmodules'
-      - 'LICENSE'
-      - 'README.MD'
 
 jobs:
   release:
@@ -20,18 +12,19 @@ jobs:
     steps:
       - name: Checkout Repository
         id: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Go
         id: setup_go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v7
         with:
-          go-version: '1.24'
+          # Single source of truth for the Go version: the module's go directive.
+          go-version-file: go.mod
           check-latest: true
 
       - name: Install Mingw
         id: install_mingw
-        run: sudo apt-get install gcc-mingw-w64-x86-64 gcc-mingw-w64-i686
+        run: sudo apt-get update && sudo apt-get install -y -q mingw-w64 gcc-mingw-w64-i686
 
       - name: Install 7zip
         id: install_7zip

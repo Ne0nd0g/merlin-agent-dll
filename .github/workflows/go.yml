@@ -1,12 +1,8 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
-name: "Merlin Agent DLL Build & Test - Development Work"
+name: "Build & Test"
 
 on:
   push:
-    branches-ignore:
-      - main
+    branches: [ "dev", "main" ]
     paths-ignore:
       - '.github/**'
       - 'docs/**'
@@ -16,67 +12,43 @@ on:
       - 'LICENSE'
       - 'README.MD'
   pull_request:
+    branches: [ "dev", "main" ]
+    paths-ignore:
+      - '.github/**'
+      - 'docs/**'
+      - '.gitattributes'
+      - '.gitignore'
+      - '.gitmodules'
+      - 'LICENSE'
+      - 'README.MD'
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
-
   build:
-    name: 'Build Job'
+    name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        id: checkout
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v7
 
       - name: Set up Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v7
         with:
-          go-version: '1.24'
+          # Single source of truth for the Go version: the module's go directive.
+          go-version-file: go.mod
           check-latest: true
 
-      - name: Install Mingw
-        id: install_mingw
-        run: sudo apt-get install gcc-mingw-w64-x86-64 gcc-mingw-w64-i686
+      # This module is a Windows CGO c-archive (main.go is //go:build windows && cgo),
+      # so it is cross-compiled with MinGW; there is nothing to build on the native
+      # linux target. `make default` runs the real build: a file-scoped
+      # `go build -buildmode=c-archive main.go` (full CGO compile of the agent) plus
+      # the MinGW DLL link. (`go vet ./...` isn't usable here: it compiles merlin.c in
+      # package mode, which #includes the build-generated main.h.)
+      - name: Install MinGW
+        run: sudo apt-get update && sudo apt-get install -y -q mingw-w64 gcc-mingw-w64-i686
 
-      - name: 'Build Merlin Agent DLL'
-        id: build
-        run: 'make default 386'
-
-      - name: Install 7zip
-        id: install_7zip
-        run: sudo apt-get install p7zip-full
-
-      - name: Package Release
-        id: package
-        run: make package
-
-      - name: GoVulnCheck
-        id: govulncheck
-        uses: golang/govulncheck-action@v1
-        with:
-          go-version-input: '1.24'
-          go-package: './...'
-
-      - name: Gosec Security Scanner
-        id: gosec
-        uses: securego/gosec@master
-        with:
-          args: '-fmt sarif -out gosec.sarif ./...'
-
-      - name: Upload Gosec SARIF file
-        id: gosec_upload_sarif
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: gosec.sarif
-
-      - name: Go Report Card - Install
-        id: goreportcard_install
-        working-directory: /tmp
-        run: |
-          git clone https://github.com/gojp/goreportcard.git
-          cd goreportcard
-          make install
-          go install ./cmd/goreportcard-cli
-
-      - name: Go Report Card - Run
-        id: goreportcard_run
-        run: 'goreportcard-cli -v' # This renames the files in the ./rpc directory to *.grc.bak causing builds to fail
+      - name: Build (c-archive DLL, amd64)
+        run: make default

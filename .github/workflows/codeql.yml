@@ -1,0 +1,72 @@
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ "dev", "main" ]
+    paths-ignore:
+      - '.github/**'
+      - 'docs/**'
+      - '.gitattributes'
+      - '.gitignore'
+      - '.gitmodules'
+      - 'LICENSE'
+      - 'README.MD'
+  pull_request:
+    branches: [ "dev", "main" ]
+    paths-ignore:
+      - '.github/**'
+      - 'docs/**'
+      - '.gitattributes'
+      - '.gitignore'
+      - '.gitmodules'
+      - 'LICENSE'
+      - 'README.MD'
+  schedule:
+    - cron: '40 17 * * 6'
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'go' ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          check-latest: true
+
+      # main.go is //go:build windows && cgo, so autobuild (native linux) would
+      # extract nothing. Use manual build mode and run the MinGW cross-build so
+      # CodeQL traces the Windows CGO compilation.
+      - name: Install MinGW
+        run: sudo apt-get update && sudo apt-get install -y -q mingw-w64 gcc-mingw-w64-i686
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: manual
+          # queries: security-extended,security-and-quality
+
+      - name: Build (manual, Windows c-archive for CodeQL extraction)
+        run: make default
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{ matrix.language }}"
