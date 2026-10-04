@@ -30,11 +30,16 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    # Build inside the same base image the merlin-base (merlin-docker) image uses, so
-    # the MinGW/binutils toolchain matches the environment where the Windows c-archive
-    # DLLs (amd64 + 386) are known to link. ubuntu-latest's apt MinGW does not reliably
-    # link the 386 DLL (ld: "cannot export addMulVVWx / go:buildinfo: symbol not found").
-    # golang:1.27-bookworm already provides Go 1.27 (matches go.mod), make, and git.
+    # Build inside the same base image merlin-base (merlin-docker) uses, so the
+    # MinGW/binutils toolchain matches where the release DLLs are built. Go 1.27
+    # (matches go.mod), make, and git are already present.
+    #
+    # The 386 DLL link used to fail here with
+    #   ld: cannot export addMulVVWx / go:buildinfo: symbol not found
+    # because mingw's default --export-all-symbols tries to export Go 1.27
+    # standard-library symbols the i686 linker won't emit. That is now fixed in
+    # the Makefile by exporting an explicit list via merlin.def, so 386 links
+    # regardless of the MinGW variant (see merlin.def).
     container: golang:1.27-bookworm
     steps:
       - name: Checkout

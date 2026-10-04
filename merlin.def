@@ -1,0 +1,22 @@
+; merlin.def - module-definition file for the Merlin agent DLL.
+;
+; Lists the functions the DLL exports. Passing this file to the final
+; `gcc -shared` link turns OFF mingw's default --export-all-symbols behavior
+; and exports ONLY the symbols named below.
+;
+; This is required for the windows/386 build: under Go 1.27 the c-archive
+; carries standard-library symbols that i686-w64-mingw32-ld refuses to
+; auto-export ("cannot export addMulVVWx / go:buildinfo: symbol not found"),
+; which breaks `make 386`. Exporting an explicit list sidesteps that and, as a
+; bonus, keeps the export table down to the real entry points on both
+; architectures instead of thousands of internal Go symbols.
+;
+; The names are the //export functions in main.go plus Magic() from merlin.c.
+EXPORTS
+    Run
+    VoidFunc
+    DllInstall
+    DllRegisterServer
+    DllUnregisterServer
+    Merlin
+    Magic

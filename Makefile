@@ -78,18 +78,18 @@ SEED=d0d03a0ae4722535a0e1d5d0c8385ce42015511e68d960fadef4b4eaf5942feb
 default:
 	export GOOS=windows GOARCH=amd64 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ CGO_ENABLED=1; \
 	go build -tags ${TAGS} -trimpath ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -buildmode=c-archive -o ${DIR}/main.a main.go && \
-	cp merlin.c ${DIR} && \
+	cp merlin.c merlin.def ${DIR} && \
 	x86_64-w64-mingw32-gcc-ranlib ${DIR}/main.a && \
-	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.x64.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32 && \
+	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.x64.dll ${DIR}/merlin.c ${DIR}/main.a ${DIR}/merlin.def -lwinmm -lntdll -lws2_32 && \
 	cp ${DIR}/merlin.x64.dll .
 
 # Compile Agent - Windows x86 DLL - main() - Console
 386:
 	export GOOS=windows GOARCH=386 CC=i686-w64-mingw32-gcc CXX=xi686-w64-mingw32-g++ CGO_ENABLED=1; \
 	go build -tags ${TAGS} -trimpath ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -buildmode=c-archive -o ${DIR}/main.a main.go && \
-	cp merlin.c ${DIR} && \
+	cp merlin.c merlin.def ${DIR} && \
 	i686-w64-mingw32-gcc-ranlib ${DIR}/main.a && \
-	i686-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.x86.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32 && \
+	i686-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.x86.dll ${DIR}/merlin.c ${DIR}/main.a ${DIR}/merlin.def -lwinmm -lntdll -lws2_32 && \
 	cp ${DIR}/merlin.x86.dll .
 
 distro: clean default 386 package
@@ -97,9 +97,9 @@ distro: clean default 386 package
 garble:
 	export GOOS=windows GOARCH=amd64 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ CGO_ENABLED=1; \
 	garble -tiny -literals -seed ${SEED} build -tags ${TAGS} -trimpath ${LDFLAGS} ${GCFLAGS} ${ASMFLAGS} -buildmode=c-archive -o ${DIR}/main.a main.go; \
-	cp merlin.c ${DIR}; \
+	cp merlin.c merlin.def ${DIR}; \
 	x86_64-w64-mingw32-gcc-ranlib ${DIR}/main.a; \
-	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.dll ${DIR}/merlin.c ${DIR}/main.a -lwinmm -lntdll -lws2_32
+	x86_64-w64-mingw32-gcc -shared -pthread -o ${DIR}/merlin.dll ${DIR}/merlin.c ${DIR}/main.a ${DIR}/merlin.def -lwinmm -lntdll -lws2_32
 
 package:
 	${PACKAGE} ${DIR}/merlin-agent-dll.7z ${DIR}/merlin.x64.dll ${DIR}/merlin.x86.dll ${F}
