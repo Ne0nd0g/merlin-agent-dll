@@ -1,5 +1,5 @@
 .idea
 .vscode
-merlin.dll
+merlin*.dll
 merlin-agent-dll.7z
 bin
